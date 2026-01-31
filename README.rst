@@ -16,14 +16,17 @@
 .. image:: https://img.shields.io/pypi/status/typing-resolver.svg
   :target: https://pypi.org/project/typing-resolver
 
-## Overview
+Overview
+========
 
 typing-resolver provides a more helpful alternative to `typing.get_type_hints()` by resolving type annotations using a reconstructed import namespace. It is intended for codebases that rely on `TYPE_CHECKING` imports, conditional imports, or inherited annotations that might not be present at runtime.
 
-## Problem
+Problem
+=======
 
 `typing.get_type_hints()` evaluates annotations in a limited namespace. If an annotation references a name that is not imported at runtime (for example, under `if TYPE_CHECKING:`), resolution fails with `NameError`.
 
-## Solution
+Solution
+========
 
 This package rebuilds a local namespace by collecting ALL import statements from inside ALL module(s) in an type object's MRO and uses that namespace when resolving type hints.
