@@ -7,7 +7,7 @@
 .. image:: https://img.shields.io/codecov/c/github/InvestmentSystems/typing-resolver.svg
   :target: https://codecov.io/gh/InvestmentSystems/typing-resolver
 
-.. image:: https://img.shields.io/github/workflow/status/InvestmentSystems/typing-resolver/Test?label=tests&logo=Github
+.. image:: https://img.shields.io/github/workflow/status/InvestmentSystems/typing-resolver/Test?label=Test&logo=Github
   :target: https://github.com/InvestmentSystems/typing-resolver/actions?query=workflow%3ATest
 
 .. image:: https://img.shields.io/pypi/status/typing-resolver.svg

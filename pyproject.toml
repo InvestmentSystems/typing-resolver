@@ -30,7 +30,7 @@ classifiers = [
 Homepage = "https://github.com/InvestmentSystems/typing-resolver"
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "coverage"]
 
 [tool.setuptools]
 package-dir = { "" = "src" }
