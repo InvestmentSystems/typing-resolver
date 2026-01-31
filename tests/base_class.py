@@ -1,6 +1,6 @@
-from tests.objects import Color
+from tests.objects import Color as Colour
 
 class BaseClass:
     age: int
     name: str
-    color: Color
+    color: Colour

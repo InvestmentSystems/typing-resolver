@@ -158,7 +158,7 @@ def get_type_hints(obj: type) -> dict[str, tp.Any]:
         localns = _get_import_namespace(obj)
     except AmbiguousImportError:
         raise
-    except:  # pragma: no cover
+    except:  # noqa: E722
         localns = None
 
     return tp.get_type_hints(obj=obj, globalns=None, localns=localns)

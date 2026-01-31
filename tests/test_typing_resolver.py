@@ -5,7 +5,6 @@ from src.typing_resolver._typing_resolver import _get_import_namespace
 from src.typing_resolver._typing_resolver import _ImportSniffer
 from src.typing_resolver._typing_resolver import AmbiguousImportError
 
-import tests
 from tests.class_with_ambigious_imports import AmbigiousImportsClass
 from tests.objects import Color, Rectangle, Point
 from tests.derived_class import DerivedClass
@@ -66,3 +65,8 @@ def test_get_type_hints_a() -> None:
         rectangle=Rectangle,
         final_attr=dict[str, float] | Point
     )
+
+
+def test_get_type_hints_ambiguous_import() -> None:
+    with pytest.raises(AmbiguousImportError):
+        get_type_hints(AmbigiousImportsClass)

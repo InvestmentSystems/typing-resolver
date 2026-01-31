@@ -1,7 +1,7 @@
 from tests.derived_class import BaseClass  # noqa: F401
-from tests.derived_class import DerivedClass
+import tests.derived_class
 
-class AmbigiousImportsClass(DerivedClass):
+class AmbigiousImportsClass(tests.derived_class.DerivedClass):
     """
     Note that even though BaseClass is not used, when we discover it, the name
     'BaseClass' is related to a module that is different from the module of
