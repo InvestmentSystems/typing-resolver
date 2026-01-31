@@ -29,6 +29,9 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/InvestmentSystems/typing-resolver"
 
+[project.optional-dependencies]
+test = ["pytest"]
+
 [tool.setuptools]
 package-dir = { "" = "src" }
 

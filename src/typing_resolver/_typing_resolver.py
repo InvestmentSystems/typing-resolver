@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import ast
-import dataclasses
+import builtins
 import importlib
 import inspect
 import typing as tp
@@ -43,9 +43,29 @@ class _Import(tp.NamedTuple):
 
 
 class _ImportSniffer(ast.NodeVisitor):
+
+    # If one of these is removed in a future release of Python, we will need to
+    # add future-handling. As of now, these nodes exist in all supported versions
+    # of Python and are exceptionally unlikely to be removed.
+    NODES_WITH_RUNTIME_SCOPE_NOT_EXECUTED_AT_IMPORT = (
+        ast.FunctionDef,
+        ast.AsyncFunctionDef,
+        ast.Lambda,
+        ast.ListComp,
+        ast.SetComp,
+        ast.DictComp,
+        ast.GeneratorExp,
+    )
+
     def __init__(self) -> None:
         super().__init__()
         self.imports: list[_Import] = []
+
+    def visit(self, node: ast.AST) -> None:
+        if isinstance(node, self.NODES_WITH_RUNTIME_SCOPE_NOT_EXECUTED_AT_IMPORT):
+            return
+
+        super().visit(node)
 
     def visit_Import(self, node: ast.Import) -> None:
         self.imports.extend(map(_Import.from_import_alias, node.names))
@@ -63,6 +83,10 @@ class AmbiguousImportError(RuntimeError):
     pass
 
 
+class NamespaceConstructionError(RuntimeError):
+    pass
+
+
 def _get_import_namespace(obj: type) -> tp.Mapping[str, tp.Any]:
     # From examing the AST, find all import statements in the module of each base class
     statements: dict[str, _Import] = {}
@@ -70,8 +94,13 @@ def _get_import_namespace(obj: type) -> tp.Mapping[str, tp.Any]:
     for base in reversed(obj.__mro__):
         module = importlib.import_module(base.__module__)
 
+        # Cannot inspect source of builtins. Plus, we don't want private Python internal imports!
+        if module is builtins:
+            continue
+
         sniffer = _ImportSniffer()
-        sniffer.visit(ast.parse(inspect.getsource(module)))
+        source = inspect.getsource(module)
+        sniffer.visit(ast.parse(source))
 
         for import_ in sniffer.imports:
             import_ = import_.add_base(base)
@@ -93,7 +122,12 @@ def _get_import_namespace(obj: type) -> tp.Mapping[str, tp.Any]:
 
     to_exec = "\n".join(import_.stmt for import_ in statements.values())
     ns = {}
-    exec(to_exec, ns)
+    try:
+        exec(to_exec, ns)
+    except NameError as e:
+        raise NamespaceConstructionError(
+            f"Failed to exec import statements for type '{obj.__name__}':\n{to_exec}"
+        ) from e
     return MappingProxyType(ns)
 
 
