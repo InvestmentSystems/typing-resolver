@@ -3,10 +3,12 @@ from pathlib import Path
 
 import pytest
 
-from src.typing_resolver._typing_resolver import (AmbiguousImportError,
-                                                  _get_import_namespace,
-                                                  _ImportSniffer,
-                                                  get_type_hints)
+from src.typing_resolver._typing_resolver import (
+    AmbiguousImportError,
+    _get_import_namespace,
+    _ImportSniffer,
+    get_type_hints,
+)
 from tests import non_top_level_imports
 from tests.base_class import BaseClass
 from tests.class_with_ambigious_imports import AmbigiousImportsClass
@@ -15,7 +17,9 @@ from tests.final_class import FinalClass
 from tests.mixin_class import MixinClass
 from tests.module_with_relative_import import (
     ClassWithRelativeImportHint,
-    ClassWithRelativeImportHintAndTYPE_CHECKINGHint, SpecialType)
+    ClassWithRelativeImportHintAndTYPE_CHECKINGHint,
+    SpecialType,
+)
 from tests.objects import Color, Point, Rectangle
 
 
@@ -93,4 +97,14 @@ def test_get_type_hints_relative_imports() -> None:
     hints1 = get_type_hints(ClassWithRelativeImportHint)
     hints2 = tp.get_type_hints(ClassWithRelativeImportHint)
 
-    assert hints1 == hints2 == dict(unique_to_another=SpecialType, file_path=Path)
+    assert (
+        hints1
+        == hints2
+        == dict(
+            age=int,
+            name=str,
+            color=Color,
+            unique_to_another=SpecialType,
+            file_path=Path,
+        )
+    )
