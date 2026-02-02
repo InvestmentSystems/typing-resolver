@@ -1,5 +1,6 @@
-from tests.derived_class import BaseClass  # noqa: F401
 import tests.derived_class
+from tests.derived_class import BaseClass  # noqa: F401
+
 
 class AmbigiousImportsClass(tests.derived_class.DerivedClass):
     """

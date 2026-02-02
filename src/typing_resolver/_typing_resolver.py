@@ -43,7 +43,6 @@ class _Import(tp.NamedTuple):
 
 
 class _ImportSniffer(ast.NodeVisitor):
-
     # If one of these is removed in a future release of Python, we will need to
     # add future-handling. As of now, these nodes exist in all supported versions
     # of Python and are exceptionally unlikely to be removed.

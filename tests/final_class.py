@@ -1,6 +1,6 @@
 from tests.derived_class import DerivedClass
 from tests.mixin_class import MixinClass
-from tests.objects import Rectangle, Point
+from tests.objects import Point, Rectangle
 
 
 class FinalClass(DerivedClass, MixinClass):
