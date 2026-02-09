@@ -43,5 +43,6 @@ jobs:
         if: github.event_name == 'push'
         uses: codecov/codecov-action@v5
         with:
+          token: 1b75be41-6426-43ec-8bab-331f1f3c7334
           files: coverage.xml
           fail_ci_if_error: false
